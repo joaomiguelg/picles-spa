@@ -1,13 +1,20 @@
 import { Link } from "react-router-dom";
 import { Header } from "../../components/common/Header";
+import { Grid } from "../../components/layout/Grid";
+import styles from './Pets.module.css'
 
 export function Pets() {
     return (
 
-        <>
-        <Header />
-        <Link to="/pets20">Ir para Listagem</Link>
-        </>
+        <Grid>
+            <div className={styles.container}>
+
+                <Header />
+                <Link to="/pets20">Ir para Listagem</Link>
+
+            </div>
+
+        </Grid>
 
     )
 }

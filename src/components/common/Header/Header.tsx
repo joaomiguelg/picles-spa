@@ -10,15 +10,17 @@ export function Header({ showReturn }: IHeader) {
     return (
 
         <header className={styles.header}>
-            {showReturn && (
-                <Link to='/pets'>
-                    <Button variant={ButtonVariant.Text}>Tenho um Abrigo</Button>
-                </Link>
-            )}
+            
 
             <Link to='/admin'>
-                <Button variant={ButtonVariant.Outlined}>Voltar</Button>
+                <Button variant={ButtonVariant.Outlined}>Tenho um Abrigo</Button>
             </Link>
+
+            {showReturn && (
+                <Link to='/pets'>
+                    <Button variant={ButtonVariant.Text}>Voltar</Button>
+                </Link>
+            )}
             
         </header>
 
