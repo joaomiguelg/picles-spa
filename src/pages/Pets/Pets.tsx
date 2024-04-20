@@ -1,8 +1,6 @@
 
-import { useQuery } from "@tanstack/react-query";
 import { Header } from "../../components/common/Header";
 import { Grid } from "../../components/layout/Grid";
-import { getPets } from "../../services/pets/get.Pets";
 import styles from './Pets.module.css'
 
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -10,6 +8,12 @@ import { Card } from "../../components/common/Card/Card";
 import Skeleton from "react-loading-skeleton";
 import { Pagination } from "../../components/common/Pagination";
 import { useSearchParams } from "react-router-dom";
+import { usePetList } from "../../hooks/usePetList";
+import { Select } from "../../components/common/Select";
+import { Button } from "../../components/common/Button";
+import { filterColumns } from "./Pets.constants";
+import { FormEvent } from "react";
+import { GetPetsRequest } from "../../Interfaces/pets";
 
 export function Pets() {
 
@@ -17,9 +21,14 @@ export function Pets() {
 
     const urlParams = {
         page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+        type: searchParams.get('type') ?? '',
+        size: searchParams.get('size') ?? '',
+        gender: searchParams.get('gender') ?? '',
     }
 
-    
+    const { data, isLoading } = usePetList(urlParams)
+
+
 
     function changePage(page: number) {
         setSearchParams((params) => {
@@ -28,12 +37,57 @@ export function Pets() {
         })
     }
 
+    function getFormValue(form: HTMLFormElement) {
+        const formData = new FormData(form)
+        return Object.fromEntries(formData)
+    }
+
+    function updateSearchParams(urlParams: GetPetsRequest) {
+        const fields: (keyof GetPetsRequest)[] = ['type', 'size', 'gender']
+        const newParams = new URLSearchParams()
+
+        fields.forEach((field) => {
+            if (urlParams[field]) {
+                newParams.set(field, String(urlParams[field]))
+            }
+        })
+        newParams.set('page', '1')
+
+        return newParams
+    }
+
+
+    function applyFilters(event: FormEvent) {
+        event.preventDefault()
+
+        const formValues = getFormValue(event.target as HTMLFormElement)
+        const newSearchParams = updateSearchParams(formValues)
+
+        setSearchParams(newSearchParams)
+    }
+
+
     return (
         <Grid>
             <div className={styles.container}>
                 <Header />
+                <form className={styles.filters} onSubmit={applyFilters}>
+                    <div className={styles.columns}>
+                        {filterColumns.map((filter) => (
+                            <div key={filter.name} className={styles.column}>
+                                <Select
+                                    label={filter.title}
+                                    defaultValue={urlParams[filter.name]}
+                                    name={filter.name}
+                                    options={filter.options}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <Button type="submit">Buscar</Button>
+                </form>
                 {
-                    isLoading && <Skeleton containerClassName={styles.skeleton} count={10}/>
+                    isLoading && <Skeleton containerClassName={styles.skeleton} count={10} />
                 }
                 <main className={styles.list}>
                     {
@@ -49,12 +103,12 @@ export function Pets() {
                 </main>
                 {
                     data?.currentPage && (
-                    <Pagination 
-                        currentPage={data.currentPage}
-                        totalPages={data.totalPages}
-                        onPageChange={(number) => changePage(number)}
-                     />
-                )}
+                        <Pagination
+                            currentPage={data.currentPage}
+                            totalPages={data.totalPages}
+                            onPageChange={(number) => changePage(number)}
+                        />
+                    )}
             </div>
         </Grid>
     )
