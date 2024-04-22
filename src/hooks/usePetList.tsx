@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
-import { GetPetResponse, GetPetsRequest } from "../Interfaces/pets"
+import { GetPetsResponse, GetPetsRequest } from "../Interfaces/pets"
 import { getPets } from "../services/pets/get.Pets"
 
 interface IUsePetList {
-    data?: GetPetResponse
+    data?: GetPetsResponse
     isLoading: boolean
 }
 

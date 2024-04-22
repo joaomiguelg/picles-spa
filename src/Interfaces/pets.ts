@@ -15,7 +15,7 @@ export type GetPetsRequest = Partial<Pick<IPet, 'type' |'size' | 'gender'>> & {
 
 }
 
-export type GetPetResponse = {
+export type GetPetsResponse = {
     items: IPet[]
     totalPages: number
     currentPage: number
