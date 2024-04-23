@@ -104,11 +104,11 @@ export function Pets() {
                     <Button type="submit" variant={isButtonEnabled ? ButtonVariant.Default : ButtonVariant.Disabled}>Buscar</Button>
                 </form>
                 {
-                    isLoading && <Skeleton containerClassName={styles.skeleton} count={10} />
-                }
+                    isLoading && (<Skeleton containerClassName={styles.skeleton} count={10} />
+                )}
                 <main className={styles.list}>
                     {
-                        data?.items.map((pet) => (
+                        data?.items?.map((pet) => (
                             <Card
                                 key={pet.id}
                                 href={`/pets/${pet.id}`}
