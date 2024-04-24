@@ -1,11 +1,13 @@
 import { NavLink } from 'react-router-dom'
 import styles from './Sidebar.module.css'
 import { Toaster, toast } from 'sonner'
+import { useShelter } from '../../../hooks/useShelter'
 
 export function Sidebar() {
+    const { data } = useShelter()
 
     function validate(event: React.MouseEvent){
-        const canAcces = false
+        const canAcces = !!data?.shelterWhatsApp
 
         if(!canAcces) {
             event.preventDefault()
@@ -15,8 +17,8 @@ export function Sidebar() {
     }
 
     return (
+        <>
         <nav className={styles.sidebar}>
-            <Toaster position='top-center' richColors={true} />
             <NavLink className={({isActive}) => (isActive? styles.active : '')} to="/admin" end>
                 Meu abrigo
             </NavLink>
@@ -26,7 +28,8 @@ export function Sidebar() {
             <NavLink to="/" end>
                 Sair
             </NavLink>
-
         </nav>
+        <Toaster position='top-center' richColors={true} />
+        </>
     )
 }
